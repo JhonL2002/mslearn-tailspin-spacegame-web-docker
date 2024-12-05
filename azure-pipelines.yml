@@ -18,12 +18,12 @@ stages:
        displayName: 'Build and push the image to container registry'
        inputs:
         command: buildAndPush
-        buildContext: $(Build.Repository.LoacalPath)
+        buildContext: $(Build.Repository.LocalPath)
         repository: $(webRepository)
-        Dockerfile: '$(Build.SourcesDirectory)/Tailspin.SpaceGame.Web/Dockerfile'
+        dockerfile: '$(Build.SourcesDirectory)/Tailspin.SpaceGame.Web/Dockerfile'
         containerRegistry: 'Container Registry Connection'
         tags: |
-         $(tag)
+          $(tag)
 
 - stage: 'Deploy'
   displayName: 'Deploy the container'
@@ -32,12 +32,12 @@ stages:
   - job: 'Deploy'
     displayName: 'Deploy job'
     pool:
-     name: 'WindowsPrivateAgent'
+      name: 'WindowsPrivateAgent'
     variables:
-     - group: Release
+      - group: Release
     steps:
     - task: AzureWebAppContainer@1
       inputs:
-       appName: $(WebAppName)
-       azureSubscription: 'Azure for Students'
-       imageName: $(RegistryName)/$(webRepository):$(build.buildId)
+        appName: $(WebAppName)
+        azureSubscription: 'Resource Manager - Tailspin - Space Game'
+        imageName: $(RegistryName)/$(webRepository):$(Build.BuildId)
